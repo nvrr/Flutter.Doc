@@ -32,7 +32,19 @@ class MyApp extends StatelessWidget {
       title: 'Flutter layout Demo',
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Flutter Layout')
+          leading: IconButton(
+          icon: Icon(Icons.menu),
+          tooltip: 'Navigation menu',
+          onPressed: null,
+        ),
+          title: Text('Flutter Layout'),
+          actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.search),
+            tooltip: 'Search',
+            onPressed: null,
+          ),
+        ],
         ),
         body: ListView(
           children: <Widget>[
