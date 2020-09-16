@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 // import 'package:flutter/rendering.dart' show debugPaintSizeEnabled;
 
 void main() {
- // debugPaintSizeEnabled = false; // Set to true for visual layout
+ // debugPaintSizeEnabled = true; // Set to true for visual layout
   runApp(MyApp());
 }
 
@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
           tooltip: 'Navigation menu',
           onPressed: null,
         ),
-          title: Text('Flutter Layout'),
+          title: Text('Flutter Layout'), centerTitle: true,
           actions: <Widget>[
           IconButton(
             icon: Icon(Icons.search),
