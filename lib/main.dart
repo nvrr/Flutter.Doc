@@ -4,7 +4,7 @@ void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
 
-  final appTitle = 'Drawer Demo';
+  final appTitle = 'ListView Demo';
 
   @override
   Widget build(BuildContext context) {
@@ -20,35 +20,66 @@ class MyHomePage extends StatelessWidget {
   final String title;
   MyHomePage({Key key, this.title}) : super(key : key);
 
+  final List<String> entries = <String>['A', 'B', 'C'];
+  final List<int> colorCodes = <int>[600, 400, 200];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
       ),
-      body: Center(
-        child: Text('MyPage!')
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            DrawerHeader(child: Text('Drawer Header'),
-            decoration: BoxDecoration(color: Colors.blue),
-            ),
-            ListTile(title: Text('Item 1'),
-            onTap: () {
-              Navigator.pop(context);
-            }
-            ),
-             ListTile(title: Text('Item 2'),
-            onTap: () {
-              Navigator.pop(context);
-            }
-            ),
-          ],
-        )
-      ),
+      body: ListView.separated(
+        padding: const EdgeInsets.all(8),
+        itemCount: entries.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            height: 50,
+            color:Colors.amber[colorCodes[index]],
+            
+          child: Center(child: Text('Entry ${entries[index]}'),),
+          );
+        },
+       separatorBuilder: (BuildContext context, int index) => const Divider(),
+      )
     );
   }
 }
+
+/*
+ ListView.builder(
+        padding: const EdgeInsets.all(8),
+        itemCount: entries.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            height: 50,
+            color:Colors.amber[colorCodes[index]],
+            
+          child: Center(child: Text('Entry ${entries[index]}'),),
+          );
+        },
+      )
+*/
+
+/*
+ListView(
+        padding: const EdgeInsets.all(8),
+        children: [
+          Container(
+           child: const Center(child: Text('Entry A')),
+           height: 50,
+           color: Colors.amber[600]
+          ),
+           Container(
+           child: const Center(child: Text('Entry B')),
+           height: 50,
+           color: Colors.amber[400]
+          ),
+           Container(
+           child: const Center(child: Text('Entry c')),
+           height: 50,
+           color: Colors.amber[200]
+          )
+        ],
+      )
+      */
