@@ -50,6 +50,7 @@ class MyCustomFormState extends State<MyCustomForm> {
             TextFormField(
                decoration: const InputDecoration(
                 icon: Icon(Icons.person),
+                border: OutlineInputBorder(), //InputBorder.null, it removes underline in field
                 hintText: 'Enter your Name',
                 labelText: 'Name *'
               ),
