@@ -1,67 +1,78 @@
-// Flutter code sample for TabController
-
-// This example shows how to listen to page updates in [TabBar] and [TabBarView]
-// when using [DefaultTabController].
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-/// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
-
   @override
   Widget build(BuildContext context) {
+    final appTitle = 'Form Validation Demo';
+
     return MaterialApp(
-      title: _title,
-      home: MyStatelessWidget(),
+      title: appTitle,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(appTitle),
+        ),
+        body: MyCustomForm(),
+      ),
     );
   }
 }
 
-final List<Tab> tabs = <Tab>[
-  Tab(text: 'Zeroth'),
-  Tab(text: 'First'),
-  Tab(text: 'Second'),
-];
+// Create a Form widget.
+class MyCustomForm extends StatefulWidget {
+  @override
+  MyCustomFormState createState() {
+    return MyCustomFormState();
+  }
+}
 
-/// This is the stateless widget that the main application instantiates.
-class MyStatelessWidget extends StatelessWidget {
-  MyStatelessWidget({Key key}) : super(key: key);
+// Create a corresponding State class.
+// This class holds data related to the form.
+class MyCustomFormState extends State<MyCustomForm> {
+  // Create a global key that uniquely identifies the Form widget
+  // and allows validation of the form.
+  //
+  // Note: This is a GlobalKey<FormState>,
+  // not a GlobalKey<MyCustomFormState>.
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: tabs.length,
-      // The Builder widget is used to have a different BuildContext to access
-      // closest DefaultTabController.
-      child: Builder(builder: (BuildContext context) {
-        final TabController tabController = DefaultTabController.of(context);
-        tabController.addListener(() {
-          if (!tabController.indexIsChanging) {
-            // Your code goes here.
-            // To get index of current tab use tabController.index
-          }
-        });
-        return Scaffold(
-          appBar: AppBar(
-            bottom: TabBar(
-              tabs: tabs,
+    // Build a Form widget using the _formKey created above.
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            TextFormField(
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
             ),
-          ),
-          body: TabBarView(
-            children: tabs.map((Tab tab) {
-              return Center(
-                child: Text(
-                  tab.text + ' Tab',
-                  style: Theme.of(context).textTheme.headline5,
-                ),
-              );
-            }).toList(),
-          ),
-        );
-      }),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
+              child: RaisedButton(
+                onPressed: () {
+                  // Validate returns true if the form is valid, or false
+                  // otherwise.
+                  if (_formKey.currentState.validate()) {
+                    // If the form is valid, display a Snackbar.
+                    Scaffold.of(context)
+                        .showSnackBar(SnackBar(content: Text('Processing Data')));
+                  }
+                },
+                child: Text('Submit'),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
