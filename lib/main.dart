@@ -1,76 +1,70 @@
+// Flutter code sample for TextField
+
+// This sample shows how to get a value from a TextField via the [onSubmitted]
+// callback.
+
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
+/// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
+  static const String _title = 'Flutter Code Sample';
+
   @override
   Widget build(BuildContext context) {
-    final appTitle = 'Form Validation Demo';
-
     return MaterialApp(
-      title: appTitle,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(appTitle),
-        ),
-        body: MyCustomForm(),
-      ),
+      title: _title,
+      home: MyStatefulWidget(),
     );
   }
 }
 
-// Create a Form widget.
-class MyCustomForm extends StatefulWidget {
+class MyStatefulWidget extends StatefulWidget {
+  MyStatefulWidget({Key key}) : super(key: key);
+
   @override
-  MyCustomFormState createState() {
-    return MyCustomFormState();
-  }
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
 }
 
-// Create a corresponding State class.
-// This class holds data related to the form.
-class MyCustomFormState extends State<MyCustomForm> {
-  // Create a global key that uniquely identifies the Form widget
-  // and allows validation of the form.
-  //
-  // Note: This is a GlobalKey<FormState>,
-  // not a GlobalKey<MyCustomFormState>.
- final _formKey = GlobalKey<FormState>();
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  TextEditingController _controller;
 
-  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Form(
-        key: _formKey,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            TextFormField(
-               decoration: const InputDecoration(
-                icon: Icon(Icons.person),
-                border: OutlineInputBorder(), //InputBorder.null, it removes underline in field
-                hintText: 'Enter your Name',
-                labelText: 'Name *'
-              ),
-              validator: (value) {
-                if(value.isEmpty) {
-                  return 'Please enter ddsome text';
-                }
-                return value.contains('@') ? 'Do not use @ char' : null;
-              }
-            ),
-            RaisedButton(
-              child:Text('Submit'),
-              onPressed: () {
-                if(_formKey.currentState.validate()){
-                  Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));
-                }
+    return Scaffold(
+      body: Center(
+        child: TextField(
+          controller: _controller,
+          onSubmitted: (String value) async {
+            await showDialog<void>(
+              context: context,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Thanks!'),
+                  content: Text('You typed "$value".'),
+                  actions: <Widget>[
+                    FlatButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                );
               },
-              )
-          ],
-        )
+            );
+          },
+        ),
       ),
     );
   }
