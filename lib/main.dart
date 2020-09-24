@@ -1,69 +1,68 @@
-// Flutter code sample for TextField
-
-// This sample shows how to get a value from a TextField via the [onSubmitted]
-// callback.
-
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
-/// This Widget is the main application widget.
 class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: _title,
-      home: MyStatefulWidget(),
+      title: 'Retrieve Text Input',
+      home: MyCustomForm(),
     );
   }
 }
 
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
-
+// Define a custom Form widget.
+class MyCustomForm extends StatefulWidget {
   @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+  _MyCustomFormState createState() => _MyCustomFormState();
 }
 
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  TextEditingController _controller;
+// Define a corresponding State class.
+// This class holds data related to the Form.
+class _MyCustomFormState extends State<MyCustomForm> {
+  // Create a text controller and use it to retrieve the current value
+  // of the TextField.
+  final myController = TextEditingController();
 
+  @override
   void initState() {
     super.initState();
-    _controller = TextEditingController();
+
+    myController.addListener(_printLatestValue);
   }
 
+  @override
   void dispose() {
-    _controller.dispose();
+    // Clean up the controller when the widget is removed from the widget tree.
+    // This also removes the _printLatestValue listener.
+    myController.dispose();
     super.dispose();
   }
 
+  _printLatestValue() {
+    print("Second text field: ${myController.text}");
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: TextField(
-          controller: _controller,
-          onSubmitted: (String value) async {
-            await showDialog<void>(
-              context: context,
-              builder: (BuildContext context) {
-                return AlertDialog(
-                  title: const Text('Thanks!'),
-                  content: Text('You typed "$value".'),
-                  actions: <Widget>[
-                    FlatButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                );
+      appBar: AppBar(
+        title: Text('Retrieve Text Input'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            TextField(
+              onChanged: (text) {
+                print("First text field: $text");
               },
-            );
-          },
+            ),
+            TextField(
+              controller: myController,
+            ),
+          ],
         ),
       ),
     );
