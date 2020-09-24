@@ -5,7 +5,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final title = 'InkWell Demo';
+    final title = 'Gesture Demo';
 
     return MaterialApp(
       title: title,
@@ -33,14 +33,22 @@ class MyHomePage extends StatelessWidget {
 class MyButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // The InkWell wraps the custom flat button widget.
-    return InkWell(
+    // The GestureDetector wraps the button.
+    return GestureDetector(
+      // When the child is tapped, show a snackbar.
       onTap: () {
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Tap')));
+        final snackBar = SnackBar(content: Text("Tap"));
+
+        Scaffold.of(context).showSnackBar(snackBar);
       },
+      // The custom button
       child: Container(
-        padding: EdgeInsets.all(12),
-        child: Text('Flat Button'),
+        padding: EdgeInsets.all(12.0),
+        decoration: BoxDecoration(
+          color: Theme.of(context).buttonColor,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Text('My Button'),
       ),
     );
   }
