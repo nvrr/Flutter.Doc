@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   transparent_image: ^1.0.0
+  cached_network_image: ^2.3.2+1
   
 
 
