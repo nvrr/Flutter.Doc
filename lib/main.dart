@@ -1,10 +1,10 @@
-// Flutter code sample for RaisedButton
+// Flutter code sample for DropdownButton
 
-// This sample shows how to render a disabled RaisedButton, an enabled RaisedButton
-// and lastly a RaisedButton with gradient background.
+// This sample shows a `DropdownButton` with a large arrow icon,
+// purple text style, and bold purple underline, whose value is one of "One",
+// "Two", "Free", or "Four".
 //
-// ![Three raised buttons, one enabled, another disabled, and the last one
-// styled with a blue gradient background](https://flutter.github.io/assets-for-api-docs/assets/material/raised_button.png)
+// ![](https://flutter.github.io/assets-for-api-docs/assets/material/dropdown_button.png)
 
 import 'package:flutter/material.dart';
 
@@ -20,53 +20,48 @@ class MyApp extends StatelessWidget {
       title: _title,
       home: Scaffold(
         appBar: AppBar(title: const Text(_title)),
-        body: MyStatelessWidget(),
+        body: Center(
+          child: MyStatefulWidget(),
+        ),
       ),
     );
   }
 }
 
-/// This is the stateless widget that the main application instantiates.
-class MyStatelessWidget extends StatelessWidget {
-  MyStatelessWidget({Key key}) : super(key: key);
+class MyStatefulWidget extends StatefulWidget {
+  MyStatefulWidget({Key key}) : super(key: key);
+
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  String dropdownValue = 'One';
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const RaisedButton(
-            onPressed: null,
-            child: Text('Disabled Button', style: TextStyle(fontSize: 20)),
-          ),
-          const SizedBox(height: 30),
-          RaisedButton(
-            onPressed: () {},
-            child: const Text('Enabled Button', style: TextStyle(fontSize: 20)),
-          ),
-          const SizedBox(height: 30),
-          RaisedButton(
-            onPressed: () {},
-            textColor: Colors.white,
-            padding: const EdgeInsets.all(0.0),
-            child: Container(
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: <Color>[
-                    Color(0xFF0D47A1),
-                    Color(0xFF1976D2),
-                    Color(0xFF42A5F5),
-                  ],
-                ),
-              ),
-              padding: const EdgeInsets.all(10.0),
-              child:
-                  const Text('Gradient Button', style: TextStyle(fontSize: 20)),
-            ),
-          ),
-        ],
+    return DropdownButton<String>(
+      value: dropdownValue,
+      icon: Icon(Icons.arrow_downward),
+      iconSize: 24,
+      elevation: 16,
+      style: TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
       ),
+      onChanged: (String newValue) {
+        setState(() {
+          dropdownValue = newValue;
+        });
+      },
+      items: <String>['One', 'Two', 'Free', 'Four']
+          .map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 }
