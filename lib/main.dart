@@ -1,67 +1,65 @@
-// Flutter code sample for DropdownButton
 
-// This sample shows a `DropdownButton` with a large arrow icon,
-// purple text style, and bold purple underline, whose value is one of "One",
-// "Two", "Free", or "Four".
-//
-// ![](https://flutter.github.io/assets-for-api-docs/assets/material/dropdown_button.png)
-
+// import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  runApp(MyApp());
+}
 
-/// This Widget is the main application widget.
-class MyApp extends StatelessWidget {
-  static const String _title = 'Flutter Code Sample';
+// MyApp is a StatefulWidget. This allows updating the state of the
+// widget when an item is removed.
+class MyApp extends StatefulWidget {
+  MyApp({Key key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: _title,
-      home: Scaffold(
-        appBar: AppBar(title: const Text(_title)),
-        body: Center(
-          child: MyStatefulWidget(),
-        ),
-      ),
-    );
+  MyAppState createState() {
+    return MyAppState();
   }
 }
 
-class MyStatefulWidget extends StatefulWidget {
-  MyStatefulWidget({Key key}) : super(key: key);
-
-  @override
-  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
-}
-
-class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-  String dropdownValue = 'One';
+class MyAppState extends State<MyApp> {
+  final items = List<String>.generate(20, (i) => "Item ${i+1}");
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButton<String>(
-      value: dropdownValue,
-      icon: Icon(Icons.arrow_downward),
-      iconSize: 24,
-      elevation: 16,
-      style: TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
+    final title = 'Dismissing Items';
+
+    return MaterialApp(
+      title: title,
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
       ),
-      onChanged: (String newValue) {
-        setState(() {
-          dropdownValue = newValue;
-        });
-      },
-      items: <String>['One', 'Two', 'Free', 'Four']
-          .map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text(title),
+        ),
+        body: ListView.builder(
+          itemCount: items.length,
+          itemBuilder:(context, index) {
+            final item = items[index];
+            return Dismissible(
+              key: Key(item),
+              background: Container(
+                color: Colors.green,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Icon(Icons.archive),
+                  ],
+                )
+                ),
+              child: ListTile(title: Text('$item')),
+
+              onDismissed: (direction) {
+                setState(() {
+                  items.removeAt(index);
+                });
+                Scaffold.of(context).showSnackBar(SnackBar(content: Text('$item dismissed')));
+              },
+            );
+          }
+        )
+      ),
     );
   }
 }
