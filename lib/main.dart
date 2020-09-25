@@ -1,29 +1,57 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MyApp());
-}
+void main() => runApp(HeroApp());
 
-class MyApp extends StatelessWidget {
+class HeroApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final title = 'Fade in images';
-
     return MaterialApp(
-      title: title,
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text(title),
-        ),
-        body: Center(
-          child: FadeInImage.assetNetwork(
-            placeholder: 'images/5.gif',
-            height:800.0,
-            fadeInCurve: Curves.bounceIn,
-            fadeInDuration: const Duration(seconds:10),
-            image: 'https://picsum.photos/250?image=9',
+      title: 'Transition Demo',
+      home: MainScreen(),
+    );
+  }
+}
+
+class MainScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Main Screen'),
+      ),
+      body: GestureDetector(
+        child: Hero(
+          tag: 'imageHero',
+          child: Image.network(
+            'https://picsum.photos/250?image=9',
           ),
         ),
+        onTap: () {
+          Navigator.push(context, MaterialPageRoute(builder: (_) {
+            return DetailScreen();
+          }));
+        },
+      ),
+    );
+  }
+}
+
+class DetailScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: GestureDetector(
+        child: Center(
+          child: Hero(
+            tag: 'imageHero',
+            child: Image.network(
+              'https://picsum.photos/250?image=9',
+            ),
+          ),
+        ),
+        onTap: () {
+          Navigator.pop(context);
+        },
       ),
     );
   }
