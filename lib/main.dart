@@ -46,7 +46,12 @@ class TodosScreen extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => DetailScreen(todo: todos[index]),
+                  builder: (context) => DetailScreen(),
+                  // Pass the arguments as part of the RouteSettings. The
+                  // DetailScreen reads the arguments from these settings.
+                  settings: RouteSettings(
+                    arguments: todos[index],
+                  ),
                 ),
               );
             },
@@ -58,14 +63,10 @@ class TodosScreen extends StatelessWidget {
 }
 
 class DetailScreen extends StatelessWidget {
-  // Declare a field that holds the Todo.
-  final Todo todo;
-
-  // In the constructor, require a Todo.
-  DetailScreen({Key key, @required this.todo}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
+    final Todo todo = ModalRoute.of(context).settings.arguments;
+
     // Use the Todo to create the UI.
     return Scaffold(
       appBar: AppBar(
