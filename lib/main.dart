@@ -1,90 +1,127 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
+
 void main() {
-  runApp(MaterialApp(
-    theme: ThemeData(primaryColor: Colors.red, accentColor: Colors.yellowAccent),
-    debugShowCheckedModeBanner: false,
-    home: SplashScreen(),
-  ));
+  runApp(Menu());
 }
 
-class SplashScreen extends StatefulWidget {
+class MenuItem extends StatelessWidget {
+  const MenuItem(this.icon, this.itemText);
+  final String icon;
+  final String itemText;
   @override
-  _SplashScreenState createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
-  @override
-
-  void initState() {
-    super.initState();
-    Timer(
-      Duration(seconds: 5), () => print('Splsh Done!')
-      );
-  }
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(color: Colors.green),
+    return ListTile(
+      leading: Text(
+        icon,
+        style: TextStyle(
+          fontSize: 40.0,
+        ),
+      ),
+      title: Text(itemText),
+    );
+  }
+}
 
-          ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.start,
+class Menu extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Demo',
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text('Menu Demo'),
+        ),
+        body: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Column(
             children: [
-              Expanded(
-                flex: 2,
-                child: Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor:  Colors.white,
-                        radius: 50.0,
-                        child: Icon(
-                          Icons.shopping_cart,
-                          color: Colors.redAccent,
-                          size: 50.0,
-                        )
-                      ),
-                      Padding(padding: EdgeInsets.only(top: 10.0)),
-                      Text(
-                        "EcomEcom",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 24.0,
-                          fontWeight: FontWeight.bold
-                        )
-                      )
-                    ],
-                  )
-                )
-              ),
-              Expanded(
-                flex: 1,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    CircularProgressIndicator(),
-                    Padding(
-                      padding: EdgeInsets.only(top: 20.0),
-                    ),
-                    Text("Online Store \n for Everyone",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 10.0,
-                      fontWeight: FontWeight.bold
-                    )
-                    )
-                  ],
-                )
-              )
+              // Modify code here
+              Example1(),
+              Example2(),
+              Example3(),
             ],
-          )
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// Problem 1: Overflow error
+class Example1 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(bottom: 30.0),
+      child: Row(
+        children: [
+          Expanded(
+                      child: Text(
+              'Explore the restaurant\'s delicious menu items below!',
+              style: TextStyle(
+                fontSize: 18.0,
+              ),
+            ),
+          ),
         ],
-      )
+      ),
+    );
+  }
+}
+
+// Problem 2: Viewport was given unbounded height error
+class Example2 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+          child: ListView(
+          children: [
+            MenuItem('🍔', 'Burger'),
+            MenuItem('🌭', 'Hot Dog'),
+            MenuItem('🍟', 'Fries'),
+            MenuItem('🥤', 'Soda'),
+            MenuItem('🍦', 'Ice Cream'),
+          ],
+        
+      ),
+    );
+  }
+}
+
+// Problem 3: Invisible VerticalDivider
+class Example3 extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+         height: 50,
+          child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+         // crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            RaisedButton(
+              onPressed: () {
+                print('Pickup button pressed.');
+              },
+              child: Text(
+                'Pickup',
+              ),
+            ),
+            // This widget is not shown on screen initially.
+            VerticalDivider(
+              width: 20.0,
+              thickness: 5.0,
+            ),
+            RaisedButton(
+              onPressed: () {
+                print('Delivery button pressed.');
+              },
+              child: Text(
+                'Delivery',
+              ),
+            )
+          ],
+        
+      ),
     );
   }
 }
