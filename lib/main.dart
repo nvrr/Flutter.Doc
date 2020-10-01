@@ -1,127 +1,90 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(Menu());
+double randomBorderRadius() {
+  return Random().nextDouble() * 64;
 }
 
-class MenuItem extends StatelessWidget {
-  const MenuItem(this.icon, this.itemText);
-  final String icon;
-  final String itemText;
+double randomMargin() {
+  return Random().nextDouble() * 64;
+}
+
+Color randomColor() {
+  return Color(0xFFFFFFFF & Random().nextInt(0xFFFFFFFF));
+}
+
+class AnimatedContainerDemo extends StatefulWidget {
+  _AnimatedContainerDemoState createState() => _AnimatedContainerDemoState();
+}
+
+class _AnimatedContainerDemoState extends State<AnimatedContainerDemo> {
+  Color color;
+  double borderRadius;
+  double margin;
+
+  @override
+  initState() {
+    color = randomColor();
+    borderRadius = randomBorderRadius();
+    margin = randomMargin();
+  }
+
+  void change() {
+    setState(() {
+      color = randomColor();
+      borderRadius = randomBorderRadius();
+      margin = randomMargin();
+    });
+  }
+
+  static const _duration = Duration(milliseconds: 400);
+
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Text(
-        icon,
-        style: TextStyle(
-          fontSize: 40.0,
+    return Scaffold(
+      body: Center(
+        child: Column(
+          children: <Widget>[
+            SizedBox(
+              width: 128,
+              height: 128,
+              child: AnimatedContainer(
+                duration: _duration,
+                margin: EdgeInsets.all(margin),
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(borderRadius),
+                ),
+              ),
+            ),
+            MaterialButton(
+              color: Theme.of(context).primaryColor,
+              child: Text(
+                'change',
+                style: TextStyle(color: Colors.white),
+              ),
+              onPressed: () => change(),
+            ),
+          ],
         ),
       ),
-      title: Text(itemText),
     );
   }
 }
 
-class Menu extends StatelessWidget {
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Menu Demo'),
-        ),
-        body: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            children: [
-              // Modify code here
-              Example1(),
-              Example2(),
-              Example3(),
-            ],
-          ),
-        ),
-      ),
+      debugShowCheckedModeBanner: false,
+      home: AnimatedContainerDemo(),
     );
   }
 }
 
-// Problem 1: Overflow error
-class Example1 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 30.0),
-      child: Row(
-        children: [
-          Expanded(
-                      child: Text(
-              'Explore the restaurant\'s delicious menu items below!',
-              style: TextStyle(
-                fontSize: 18.0,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-// Problem 2: Viewport was given unbounded height error
-class Example2 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-          child: ListView(
-          children: [
-            MenuItem('🍔', 'Burger'),
-            MenuItem('🌭', 'Hot Dog'),
-            MenuItem('🍟', 'Fries'),
-            MenuItem('🥤', 'Soda'),
-            MenuItem('🍦', 'Ice Cream'),
-          ],
-        
-      ),
-    );
-  }
-}
-
-// Problem 3: Invisible VerticalDivider
-class Example3 extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-         height: 50,
-          child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-         // crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            RaisedButton(
-              onPressed: () {
-                print('Pickup button pressed.');
-              },
-              child: Text(
-                'Pickup',
-              ),
-            ),
-            // This widget is not shown on screen initially.
-            VerticalDivider(
-              width: 20.0,
-              thickness: 5.0,
-            ),
-            RaisedButton(
-              onPressed: () {
-                print('Delivery button pressed.');
-              },
-              child: Text(
-                'Delivery',
-              ),
-            )
-          ],
-        
-      ),
-    );
-  }
+void main() {
+  runApp(
+    MyApp(),
+  );
 }
